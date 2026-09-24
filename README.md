@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by zeynepsaraycikli.*
+*This project has been created as part of the 42 curriculum by zesarayc.*
 
 # Get Next Line
 
@@ -28,9 +28,9 @@ If you prefer to compile it as a static library (`libgnl.a`) for easy linking in
 ## Algorithm Explanation
 The algorithm relies on maintaining a persistent state across function calls using a `static char *` variable (or an array of them in the bonus). The process follows a three-step logic:
 
-1. **Read and Stash (`read_and_stash`)**: We read from the file descriptor in chunks defined by `BUFFER_SIZE`. After each read, the newly acquired buffer is joined (via `ft_strjoin`) with the persistent static variable (`stash`). This looping process halts immediately once a newline character `\n` is detected within the stash, or if `read` returns 0 (indicating EOF).
-2. **Extract Line (`extract_line`)**: We iterate through our accumulated `stash` until we hit the first `\n` or the null terminator. We allocate the exact amount of memory needed to hold this segment (including the `\n` if it exists) and return it to the user.
-3. **Update Stash (`update_stash`)**: We must remove the line we just extracted from the `stash` so that the next function call begins reading immediately after the newline. We isolate the trailing remainder of the string, move it into a newly allocated string, and completely `free()` the old stash to prevent memory leaks. If no characters remain after the newline, the stash is simply freed and set to `NULL`.
+1. **Read and Stash (`fill_stash`)**: We read from the file descriptor in chunks defined by `BUFFER_SIZE`. After each read, the newly acquired buffer is joined (via `ft_strjoin`) with the persistent static variable (`stash`). This looping process halts immediately once a newline character `\n` is detected within the stash, or if `read` returns 0 (indicating EOF).
+2. **Fetch Line (`fetch_line`)**: We iterate through our accumulated `stash` until we hit the first `\n` or the null terminator. We allocate the exact amount of memory needed to hold this segment (including the `\n` if it exists) and return it to the user.
+3. **Trim Stash (`trim_stash`)**: We must remove the line we just extracted from the `stash` so that the next function call begins reading immediately after the newline. We isolate the trailing remainder of the string, move it into a newly allocated string, and completely `free()` the old stash to prevent memory leaks. If no characters remain after the newline, the stash is simply freed and set to `NULL`.
 
 This logic was chosen because it correctly handles edge cases (like a file not ending in a newline), avoids utilizing excessively large memory blocks at once, and guarantees leak-free execution by rigorously cleaning up unused memory allocations.
 
@@ -38,4 +38,3 @@ This logic was chosen because it correctly handles edge cases (like a file not e
 - [C File I/O and File Descriptors (Wikipedia)](https://en.wikipedia.org/wiki/File_descriptor)
 - [Understanding Static Variables in C](https://www.geeksforgeeks.org/static-variables-in-c/)
 - **AI Usage**: AI was used purely as a guided peer-learning tool to help construct this README file format and to cross-check the memory leak safety of the `ft_strjoin` and `update_stash` operations against the constraints of the 42 subject.
-
